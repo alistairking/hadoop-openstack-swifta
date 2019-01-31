@@ -1388,7 +1388,8 @@ public final class SwiftRestClient {
     } while (statusCode == HttpStatus.SC_UNAUTHORIZED && retry < clientConfig.getRetryAuth());
 
     if ((statusCode == HttpStatus.SC_UNAUTHORIZED || statusCode == HttpStatus.SC_BAD_REQUEST)
-        && method instanceof AuthPostMethod && !useKeystoneAuthentication) {
+        && method instanceof AuthPostMethod && !useKeystoneAuthentication
+            && clientConfig.getKeystoneAuthRequest() != null) {
       if (LOG.isDebugEnabled()) {
         LOG.debug(
             "Operation failed with status " + method.getStatusCode() + " attempting keystone auth");

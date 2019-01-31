@@ -24,7 +24,7 @@ import java.util.Objects;
  * information. THIS FILE IS MAPPED BY JACKSON TO AND FROM JSON. DO NOT RENAME OR MODIFY FIELDS AND
  * THEIR ACCESSORS.
  */
-public class PasswordAuthenticationRequest extends AuthenticationRequest {
+public class PasswordAuthenticationRequest extends AuthenticationRequestV2 {
 
   /**
    * Credentials for login.

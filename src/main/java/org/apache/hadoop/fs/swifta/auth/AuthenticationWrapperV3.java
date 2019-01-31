@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -19,18 +19,29 @@
 package org.apache.hadoop.fs.swifta.auth;
 
 /**
- * Class that represents authentication request to Openstack Keystone.
- * Contains basic authentication information.
+ * This class is used for correct hierarchy mapping of
+ * Keystone authentication model and java code
  * THIS FILE IS MAPPED BY JACKSON TO AND FROM JSON.
  * DO NOT RENAME OR MODIFY FIELDS AND THEIR ACCESSORS.
  */
-public class AuthenticationRequest {
+public class AuthenticationWrapperV3 {
 
-  public AuthenticationRequest() {
-  }
+    /**
+     * authentication response field
+     */
+    private AuthenticationResponseV3 token;
 
-  @Override
-  public String toString() {
-    return "AuthenticationRequest";
-  }
+    /**
+     * @return authentication response
+     */
+    public AuthenticationResponseV3 getToken() {
+        return token;
+    }
+
+    /**
+     * @param token sets authentication response
+     */
+    public void setToken(AuthenticationResponseV3 token) {
+        this.token = token;
+    }
 }

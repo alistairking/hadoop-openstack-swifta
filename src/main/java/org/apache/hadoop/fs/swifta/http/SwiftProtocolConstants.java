@@ -287,9 +287,14 @@ public class SwiftProtocolConstants {
 
   public static final String DOT_AUTH_URL = ".auth.url";
   public static final String DOT_AUTH_ENDPOINT_PREFIX = ".auth.endpoint.prefix";
+  public static final String DOT_AUTH_KEYSTONE_VERSION = ".auth.keystone.version";
   public static final String DOT_TENANT = ".tenant";
+  public static final String DOT_CONTAINER_TENANT = ".container.tenant";
   public static final String DOT_USERNAME = ".username";
   public static final String DOT_PASSWORD = ".password";
+  public static final String DOT_TRUST_ID = ".trust.id";
+  public static final String DOT_DOMAIN_NAME = ".domain.name";
+  public static final String DOT_DOMAIN_ID = ".domain.id";
   public static final String DOT_HTTP_PORT = ".http.port";
   public static final String DOT_HTTPS_PORT = ".https.port";
   public static final String DOT_REGION = ".region";
@@ -310,9 +315,14 @@ public class SwiftProtocolConstants {
 
   public static final String SWIFT_AUTH_PROPERTY = FS_SWIFT + DOT_AUTH_URL;
   public static final String SWIFT_AUTH_ENDPOINT_PREFIX = FS_SWIFT + DOT_AUTH_ENDPOINT_PREFIX;
+  public static final String SWIFT_AUTH_KEYSTONE_VERSION_PROPERTY = FS_SWIFT + DOT_AUTH_KEYSTONE_VERSION;
   public static final String SWIFT_TENANT_PROPERTY = FS_SWIFT + DOT_TENANT;
+  public static final String SWIFT_CONTAINER_TENANT_PROPERTY = FS_SWIFT + DOT_CONTAINER_TENANT;
   public static final String SWIFT_USERNAME_PROPERTY = FS_SWIFT + DOT_USERNAME;
   public static final String SWIFT_PASSWORD_PROPERTY = FS_SWIFT + DOT_PASSWORD;
+  public static final String SWIFT_TRUST_ID_PROPERTY = FS_SWIFT + DOT_TRUST_ID;
+  public static final String SWIFT_DOMAIN_NAME_PROPERTY = FS_SWIFT + DOT_DOMAIN_NAME;
+  public static final String SWIFT_DOMAIN_ID_PROPERTY = FS_SWIFT + DOT_DOMAIN_ID;
   public static final String SWIFT_APIKEY_PROPERTY = FS_SWIFT + DOT_APIKEY;
   public static final String SWIFT_HTTP_PORT_PROPERTY = FS_SWIFT + DOT_HTTP_PORT;
   public static final String SWIFT_HTTPS_PORT_PROPERTY = FS_SWIFT + DOT_HTTPS_PORT;

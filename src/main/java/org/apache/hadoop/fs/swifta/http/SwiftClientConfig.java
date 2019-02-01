@@ -17,66 +17,18 @@
 
 package org.apache.hadoop.fs.swifta.http;
 
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.CACHE_LIVE_TIME;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.CACHE_SIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_CONNECT_TIMEOUT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_RETRY_AUTH_COUNT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_RETRY_COUNT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_SOCKET_TIMEOUT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_SWIFT_BLOCKSIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_SWIFT_INPUT_STREAM_BUFFER_SIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_SWIFT_PARTITION_SIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_SWIFT_REQUEST_SIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_THROTTLE_DELAY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DEFAULT_WRITE_POLICY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_APIKEY_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_AUTH_ENDPOINT_PREFIX;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_AUTH_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_BLOCKSIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_CONNECTION_TIMEOUT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_CONTAINER_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_INPUT_STREAM_BUFFER_SIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_LAZY_SEEK;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_LOCATION_AWARE_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_MAX_CONNECTIONS_FOR_COPY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_MAX_CONNECTIONS_FOR_DELETE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_MAX_CONNECTIONS_FOR_UPLOAD;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_MAX_HOST_CONNECTIONS;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_MAX_TOTAL_CONNECTIONS;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_OUTPUT_STREAM_BUFFER_SIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_PARTITION_SIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_PASSWORD_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_PROXY_HOST_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_PROXY_PORT_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_PUBLIC_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_REGION_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_REQUEST_SIZE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_RETRY_AUTH_COUNT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_RETRY_COUNT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_SERVICE_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_SOCKET_TIMEOUT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_TENANT_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_THROTTLE_DELAY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_USERNAME_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_WRITE_POLICY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.USE_HEADER_CACHE;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.swifta.auth.ApiKeyAuthenticationRequest;
-import org.apache.hadoop.fs.swifta.auth.ApiKeyCredentials;
-import org.apache.hadoop.fs.swifta.auth.AuthenticationRequest;
-import org.apache.hadoop.fs.swifta.auth.KeyStoneAuthRequest;
-import org.apache.hadoop.fs.swifta.auth.KeystoneApiKeyCredentials;
-import org.apache.hadoop.fs.swifta.auth.PasswordAuthenticationRequest;
-import org.apache.hadoop.fs.swifta.auth.PasswordCredentials;
+import org.apache.hadoop.fs.swifta.auth.*;
 import org.apache.hadoop.fs.swifta.exceptions.SwiftConfigurationException;
 import org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.WritePolicies;
 import org.apache.hadoop.fs.swifta.util.DurationStatsTable;
+
+import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.*;
 
 
 public class SwiftClientConfig {
@@ -121,6 +73,21 @@ public class SwiftClientConfig {
   private String password;
 
   /**
+   * trust id
+   */
+  private String trust_id;
+
+  /**
+   * user's domain name
+   */
+  private String domain_name;
+
+  /**
+   * user's domain id
+   */
+  private String domain_id;
+
+  /**
    * The user API key.
    */
   private String apiKey;
@@ -136,9 +103,12 @@ public class SwiftClientConfig {
    */
   private AuthenticationRequest keystoneAuthRequest;
 
+  /**
+   * The container this client is working with
+   */
+  private String container;
   private String serviceDescription;
-
-  private URI filesystemUri;
+  private String containerTenant;
 
   /**
    * The name of the service provider.
@@ -273,16 +243,26 @@ public class SwiftClientConfig {
     String stringAuthUri = getOption(props, SWIFT_AUTH_PROPERTY);
     username = getOption(props, SWIFT_USERNAME_PROPERTY);
     password = props.getProperty(SWIFT_PASSWORD_PROPERTY);
+    trust_id = props.getProperty(SWIFT_TRUST_ID_PROPERTY);
+    domain_name = props.getProperty(SWIFT_DOMAIN_NAME_PROPERTY);
+    domain_id = props.getProperty(SWIFT_DOMAIN_ID_PROPERTY);
     apiKey = props.getProperty(SWIFT_APIKEY_PROPERTY);
     // optional
     region = props.getProperty(SWIFT_REGION_PROPERTY);
     // tenant is optional
     tenant = props.getProperty(SWIFT_TENANT_PROPERTY);
+    //containerTenant is optional
+    containerTenant = props.getProperty(SWIFT_CONTAINER_TENANT_PROPERTY);
     // service is used for diagnostics
     serviceProvider = props.getProperty(SWIFT_SERVICE_PROPERTY);
+    container = props.getProperty(SWIFT_CONTAINER_PROPERTY);
     String isPubProp = props.getProperty(SWIFT_PUBLIC_PROPERTY, "false");
     usePublicUrl = "true".equals(isPubProp);
     authEndpointPrefix = getOption(props, SWIFT_AUTH_ENDPOINT_PREFIX);
+    LOG.debug("Keystone version: " + props.getProperty(SWIFT_AUTH_KEYSTONE_VERSION_PROPERTY));
+    boolean isV3Prop = "3".equals(props.getProperty(SWIFT_AUTH_KEYSTONE_VERSION_PROPERTY));
+    boolean isV3 = isV3Prop || stringAuthUri.contains("/v3/auth/tokens");
+
     maxCoreConnections = conf.getInt(SWIFT_MAX_HOST_CONNECTIONS, DEFAULT_CONNECTIONS);
 
     maxTotalConnections = conf.getInt(SWIFT_MAX_TOTAL_CONNECTIONS, DEFAULT_CONNECTIONS);
@@ -300,18 +280,35 @@ public class SwiftClientConfig {
     maxInParallelUpload = conf.getInt(SWIFT_MAX_CONNECTIONS_FOR_UPLOAD, DEFAULT_CONNECTIONS);
 
     if (apiKey == null && password == null) {
-      throw new SwiftConfigurationException("Configuration for " + filesystemUri
-          + " must contain either " + SWIFT_PASSWORD_PROPERTY + " or " + SWIFT_APIKEY_PROPERTY);
+      throw new SwiftConfigurationException("Configuration must contain either "
+              + SWIFT_PASSWORD_PROPERTY + " or " + SWIFT_APIKEY_PROPERTY);
     }
-    // create the (reusable) authentication request
-    if (password != null) {
-      authRequest =
-          new PasswordAuthenticationRequest(tenant, new PasswordCredentials(username, password));
+    //create the (reusable) authentication request
+    if (isV3) {
+      if (trust_id == null) {
+        if (password != null) {
+          authRequest = new PasswordAuthenticationRequestV3(tenant,
+                  new PasswordCredentialsV3(username, password, domain_name,
+                          domain_id));
+        } else {
+          authRequest = new TokenAuthenticationRequestV3(apiKey);
+        }
+      } else {
+        authRequest = new TrustAuthenticationRequest(
+                new PasswordCredentialsV3(username, password, domain_name,
+                        domain_id),
+                trust_id);
+      }
     } else {
-      authRequest =
-          new ApiKeyAuthenticationRequest(tenant, new ApiKeyCredentials(username, apiKey));
-      keystoneAuthRequest =
-          new KeyStoneAuthRequest(tenant, new KeystoneApiKeyCredentials(username, apiKey));
+      if (password != null) {
+        authRequest = new PasswordAuthenticationRequest(tenant,
+                new PasswordCredentials(username, password));
+      } else {
+        authRequest = new ApiKeyAuthenticationRequest(tenant,
+                new ApiKeyCredentials(username, apiKey));
+        keystoneAuthRequest = new KeyStoneAuthRequest(tenant,
+                new KeystoneApiKeyCredentials(username, apiKey));
+      }
     }
     locationAware = "true".equals(props.getProperty(SWIFT_LOCATION_AWARE_PROPERTY, "false"));
 
@@ -437,6 +434,14 @@ public class SwiftClientConfig {
     this.tenant = tenant;
   }
 
+  public String getContainerTenant() {
+    return containerTenant;
+  }
+
+  public void setContainerTenant(String containerTenant) {
+    this.containerTenant = containerTenant;
+  }
+
   public String getUsername() {
     return username;
   }
@@ -451,6 +456,38 @@ public class SwiftClientConfig {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public String getTrust_id() {
+    return trust_id;
+  }
+
+  public void setTrust_id(String trust_id) {
+    this.trust_id = trust_id;
+  }
+
+  public String getDomain_name() {
+    return domain_name;
+  }
+
+  public void setDomain_name(String domain_name) {
+    this.domain_name = domain_name;
+  }
+
+  public String getDomain_id() {
+    return domain_id;
+  }
+
+  public void setDomain_id(String domain_id) {
+    this.domain_id = domain_id;
+  }
+
+  public String getContainer() {
+    return container;
+  }
+
+  public void setContainer(String container) {
+    this.container = container;
   }
 
   public String getApiKey() {

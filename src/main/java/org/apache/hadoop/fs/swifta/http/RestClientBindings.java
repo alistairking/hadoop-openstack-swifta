@@ -17,35 +17,12 @@
 
 package org.apache.hadoop.fs.swifta.http;
 
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_APIKEY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_AUTH_ENDPOINT_PREFIX;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_AUTH_URL;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_HTTPS_PORT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_HTTP_PORT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_LOCATION_AWARE;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_PASSWORD;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_PUBLIC;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_REGION;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_TENANT;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.DOT_USERNAME;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_APIKEY_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_AUTH_ENDPOINT_PREFIX;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_AUTH_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_HTTPS_PORT_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_HTTP_PORT_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_LOCATION_AWARE_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_PASSWORD_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_PUBLIC_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_REGION_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_SERVICE_PREFIX;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_SERVICE_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_TENANT_PROPERTY;
-import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.SWIFT_USERNAME_PROPERTY;
-
 import java.net.URI;
 import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.swifta.exceptions.SwiftConfigurationException;
+
+import static org.apache.hadoop.fs.swifta.http.SwiftProtocolConstants.*;
 
 /**
  * This class implements the binding logic between Hadoop configurations and the swift rest client.
@@ -108,11 +85,16 @@ public final class RestClientBindings {
     props.setProperty(SWIFT_SERVICE_PROPERTY, service);
     copy(conf, prefix + DOT_AUTH_URL, props, SWIFT_AUTH_PROPERTY, true);
     copy(conf, prefix + DOT_AUTH_ENDPOINT_PREFIX, props, SWIFT_AUTH_ENDPOINT_PREFIX, true);
+    copy(conf, prefix + DOT_AUTH_KEYSTONE_VERSION, props, SWIFT_AUTH_KEYSTONE_VERSION_PROPERTY, false);
     copy(conf, prefix + DOT_USERNAME, props, SWIFT_USERNAME_PROPERTY, true);
     copy(conf, prefix + DOT_APIKEY, props, SWIFT_APIKEY_PROPERTY, false);
     copy(conf, prefix + DOT_PASSWORD, props, SWIFT_PASSWORD_PROPERTY,
         props.contains(SWIFT_APIKEY_PROPERTY) ? true : false);
+    copy(conf, prefix + DOT_TRUST_ID, props, SWIFT_TRUST_ID_PROPERTY, false);
+    copy(conf, prefix + DOT_DOMAIN_NAME, props, SWIFT_DOMAIN_NAME_PROPERTY, false);
+    copy(conf, prefix + DOT_DOMAIN_ID, props, SWIFT_DOMAIN_ID_PROPERTY, false);
     copy(conf, prefix + DOT_TENANT, props, SWIFT_TENANT_PROPERTY, false);
+    copy(conf, prefix + DOT_CONTAINER_TENANT, props, SWIFT_CONTAINER_TENANT_PROPERTY, false);
     copy(conf, prefix + DOT_REGION, props, SWIFT_REGION_PROPERTY, false);
     copy(conf, prefix + DOT_HTTP_PORT, props, SWIFT_HTTP_PORT_PROPERTY, false);
     copy(conf, prefix + DOT_HTTPS_PORT, props, SWIFT_HTTPS_PORT_PROPERTY, false);

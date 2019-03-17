@@ -581,13 +581,9 @@ public class SwiftNativeFileSystem extends FileSystem {
         throw new SwiftPathExistsException("Path exists: " + file);
       }
     } else {
-      // destination does not exist -trigger creation of the parent
-      Path parent = file.getParent();
-      if (parent != null) {
-        if (!mkdirs(parent)) {
-          throw new SwiftOperationFailedException("Mkdirs failed to create " + parent);
-        }
-      }
+      // destination does not exist -trigger creation of the container at least
+      // (parent directories will be implicit based on pseudo-dir support)
+      store.createContainer(file);
     }
 
     SwiftOutputStream out = createSwiftOutputStream(file);

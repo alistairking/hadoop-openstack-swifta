@@ -331,13 +331,21 @@ public class SwiftFileSystemBaseTest extends Assert implements SwiftTestConstant
   }
 
   /**
-   * Assert that a file exists and whose {@link FileStatus} entry declares that this is a file and
-   * not a symlink or directory.
+   * Create the given directory recursively and assert that it is created.
    *
    * @throws IOException IO problems during file operations
    */
   protected void mkdirs(Path path) throws IOException {
     assertTrue("Failed to mkdir" + path, fs.mkdirs(path));
+  }
+
+  /**
+   * Create the given directory recursively and assert that it is created.
+   *
+   * @throws IOException IO problems during file operations
+   */
+  protected void mkdir(Path path) throws IOException {
+    assertTrue("Failed to mkdir" + path, fs.mkdir(path));
   }
 
   /**
